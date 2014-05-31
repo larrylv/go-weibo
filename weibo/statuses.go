@@ -12,9 +12,9 @@ type StatusesService struct {
 	client *Client
 }
 
-// Status represents a Weibo's status
+// Status represents a Weibo's status.
 type Status struct {
-	ID             *string `json:"id,omitempty"`
+	ID             *int    `json:"id,omitempty"`
 	Text           *string `json:"text,omitempty"`
 	Source         *string `json:"source,omitempty"`
 	Favorited      *bool   `json:"favorited,omitempty"`
@@ -23,6 +23,14 @@ type Status struct {
 	CommentsCount  *int    `json:"comments_count,omitempty"`
 	AttitudesCount *int    `json:"attitudes_count,omitemtpy"`
 	Visible        *int    `json:"visible,omitempty"`
+}
+
+// Timeline represents Weibo statuses set.
+type Timeline struct {
+	Statuses       []Status `json:"statuses,omitempty"`
+	TotalNumber    *int     `json:"total_number,omitempty"`
+	PreviousCursor *int     `json:"previous_cursor,omitempty"`
+	NextCursor     *int     `json:"next_cursor,omitempty"`
 }
 
 // StatusListOptions specifies the optional parameters to the
@@ -39,7 +47,7 @@ type StatusListOptions struct {
 // timeline for the authenticated user.
 //
 // Weibo API docs: http://open.weibo.com/wiki/2/statuses/user_timeline
-func (s *StatusesService) UserTimeline(opt *StatusListOptions) ([]Status, *Response, error) {
+func (s *StatusesService) UserTimeline(opt *StatusListOptions) (*Timeline, *Response, error) {
 	u, err := addOptions("statuses/user_timeline", opt)
 	if err != nil {
 		return nil, nil, err
@@ -50,11 +58,11 @@ func (s *StatusesService) UserTimeline(opt *StatusListOptions) ([]Status, *Respo
 		return nil, nil, err
 	}
 
-	statuses := new([]Status)
-	resp, err := s.client.Do(req, statuses)
+	timeline := &Timeline{}
+	resp, err := s.client.Do(req, timeline)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	return *statuses, resp, err
+	return timeline, resp, err
 }

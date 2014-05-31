@@ -18,18 +18,18 @@ func TestUserTimeline(t *testing.T) {
 		testFormValues(t, r, values{
 			"uid": uid,
 		})
-		fmt.Fprint(w, `[{"id": "1"}]`)
+		fmt.Fprint(w, `{"statuses": [{"id": 1, "text": "hello weibo"}], "total_number": 1}`)
 	})
 
 	opt := &StatusListOptions{UID: String(uid)}
-	statuses, _, err := client.Statuses.UserTimeline(opt)
+	timeline, _, err := client.Statuses.UserTimeline(opt)
 
 	if err != nil {
 		t.Errorf("Statuses.UserTimeline returned error: %v", err)
 	}
 
-	want := []Status{{ID: String("1")}}
-	if !reflect.DeepEqual(statuses, want) {
-		t.Errorf("Statuses.UserTimeline returned %+v, want %+v", statuses, want)
+	want := Timeline{Statuses: []Status{{ID: Int(1), Text: String("hello weibo")}}, TotalNumber: Int(1)}
+	if !reflect.DeepEqual(timeline.Statuses, want.Statuses) {
+		t.Errorf("Statuses.UserTimeline returned %+v, want %+v", timeline, want)
 	}
 }
