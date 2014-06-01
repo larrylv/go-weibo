@@ -31,7 +31,7 @@ accessToken = "FsdRIOEe7c7d"
 client := weibo.NewClient(accessToken)
 
 // Update a weibo
-opts = &weibo.UpdateOptions{Status: weibo.String("Hello, Weibo!")}
+opts = &weibo.StatusBody{Status: weibo.String("Hello, Weibo!")}
 status, _, err := client.Statuses.Update(opts)
 ```
 
