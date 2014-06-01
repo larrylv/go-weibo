@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestUserTimeline(t *testing.T) {
+func TestStatusesUserTimeline(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -34,12 +34,12 @@ func TestUserTimeline(t *testing.T) {
 	}
 }
 
-func TestUpdate(t *testing.T) {
+func TestStatusesUpdate(t *testing.T) {
 	setup()
 	defer teardown()
 
 	text := "Hello, weibo!"
-	visible := Visible{Int(1), Int(1)}
+	visible := 1
 
 	mux.HandleFunc("/2/statuses/update.json", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
@@ -49,19 +49,21 @@ func TestUpdate(t *testing.T) {
             {
                 "id" : 1,
                 "text" : "Hello, weibo!",
-                "visible": {"type": 1, "list_id": 1}
+                "visible": {
+                    "type": 1
+                }
             }
             `)
 	})
 
-	opt := &UpdateOptions{Status: String(text), Visible: &visible}
+	opt := &UpdateOptions{Status: String(text), Visible: Int(visible)}
 	status, _, err := client.Statuses.Update(opt)
 
 	if err != nil {
 		t.Errorf("Statuses.Update returned error %v", err)
 	}
 
-	want := &Status{ID: Int64(1), Text: String("Hello, weibo!"), Visible: &visible}
+	want := &Status{ID: Int64(1), Text: String("Hello, weibo!"), Visible: &Visible{VType: Int(1)}}
 	if !reflect.DeepEqual(status, want) {
 		t.Errorf("Statuses.Update returned %+v, want %+v", status, want)
 	}
