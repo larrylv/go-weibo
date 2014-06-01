@@ -55,13 +55,13 @@ type StatusListOptions struct {
 // UpdateOptions specifies the optional parameters to the
 // StatusService.Update method.
 type UpdateOptions struct {
-	Status      *string  `json:status`
-	Visible     *Visible `json:visible,omitempty`
-	ListID      *int     `json:list_id,omitempty`
-	Lat         *float64 `json:lat,omitempty`
-	Long        *float64 `json:long,omitempty`
-	Annotations *string  `json:annotations,omitempty`
-	RealIP      *string  `json:rip,omitempty`
+	Status      *string  `json:"status"`
+	Visible     *int     `json:"visible,omitempty"`
+	ListID      *int     `json:"list_id,omitempty"`
+	Lat         *float64 `json:"lat,omitempty"`
+	Long        *float64 `json:"long,omitempty"`
+	Annotations *string  `json:"annotations,omitempty"`
+	RealIP      *string  `json:"rip,omitempty"`
 }
 
 // Timeline for a user. Passing the empty string will return
