@@ -13,7 +13,7 @@ func TestUserTimeline(t *testing.T) {
 
 	uid := "42"
 
-	mux.HandleFunc("/2/statuses/user_timeline", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/2/statuses/user_timeline.json", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
 		testFormValues(t, r, values{
 			"uid": uid,
@@ -41,7 +41,7 @@ func TestUpdate(t *testing.T) {
 	text := "Hello, weibo!"
 	visible := 2
 
-	mux.HandleFunc("/2/statuses/update", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/2/statuses/update.json", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
 
 		fmt.Fprint(w,

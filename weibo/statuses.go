@@ -60,7 +60,7 @@ type UpdateOptions struct {
 //
 // Weibo API docs: http://open.weibo.com/wiki/2/statuses/user_timeline
 func (s *StatusesService) UserTimeline(opt *StatusListOptions) (*Timeline, *Response, error) {
-	u, err := addOptions("statuses/user_timeline", opt)
+	u, err := addOptions("statuses/user_timeline.json", opt)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -80,7 +80,7 @@ func (s *StatusesService) UserTimeline(opt *StatusListOptions) (*Timeline, *Resp
 }
 
 func (s *StatusesService) Update(opt *UpdateOptions) (*Status, *Response, error) {
-	u := "statuses/update"
+	u := "statuses/update.json"
 
 	req, err := s.client.NewRequest("POST", u, opt)
 	if err != nil {
