@@ -21,7 +21,7 @@ func TestUserTimeline(t *testing.T) {
 		fmt.Fprint(w, `{"statuses": [{"id": 1, "text": "hello weibo"}], "total_number": 1}`)
 	})
 
-	opt := &StatusListOptions{UID: String(uid)}
+	opt := &StatusListOptions{UID: uid}
 	timeline, _, err := client.Statuses.UserTimeline(opt)
 
 	if err != nil {

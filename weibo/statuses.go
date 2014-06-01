@@ -45,10 +45,10 @@ type Timeline struct {
 // StatusListOptions specifies the optional parameters to the
 // StatusService.UserTimeline method.
 type StatusListOptions struct {
-	UID        *string `url:"uid,omitempty"`
-	ScreenName *string `url:"screen_name,omitempty"`
-	SinceID    *string `url:"since_id,omitempty"`
-	MaxID      *string `url:"max_id,omitempty"`
+	UID        string `url:"uid,omitempty"`
+	ScreenName string `url:"screen_name,omitempty"`
+	SinceID    string `url:"since_id,omitempty"`
+	MaxID      string `url:"max_id,omitempty"`
 	ListOptions
 }
 
