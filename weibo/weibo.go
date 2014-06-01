@@ -113,6 +113,7 @@ func (c *Client) NewRequest(method, urlString string, body interface{}) (*http.R
 	}
 
 	req.Header.Add("User-Agent", c.UserAgent)
+	req.Header.Add("Authorization", "OAuth2 "+c.accessToken)
 	return req, nil
 }
 
