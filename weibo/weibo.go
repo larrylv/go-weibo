@@ -213,6 +213,15 @@ func Int(v int) *int {
 	return p
 }
 
+// Int is a helper routine that allocates a new int64 value
+// to store v and returns a pointer to it, but unlike Int64
+// its argument value is an int.
+func Int64(v int) *int64 {
+	p := new(int64)
+	*p = int64(v)
+	return p
+}
+
 // String is a helper routine that allocates a new string value
 // to store v and returns a pointer to it.
 func String(v string) *string {
