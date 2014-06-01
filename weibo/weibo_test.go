@@ -73,6 +73,18 @@ func TestNewClient(t *testing.T) {
 func TestNewRequest(t *testing.T) {
 	c := NewClient("123")
 
+	inURL, outURL := "foo", defaultBaseURL+"2/foo"
+	req, _ := c.NewRequest("GET", inURL, nil)
+
+	// test that relative URL was expanded
+	if req.URL.String() != outURL {
+		t.Errorf("NewRequest(%v) URL = %v, want %v", inURL, req.URL, outURL)
+	}
+}
+
+func TestNewRequest_hasSlashPrefix(t *testing.T) {
+	c := NewClient("123")
+
 	inURL, outURL := "/foo", defaultBaseURL+"2/foo"
 	req, _ := c.NewRequest("GET", inURL, nil)
 
