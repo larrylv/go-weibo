@@ -32,7 +32,7 @@ func setup() {
 	server = httptest.NewServer(mux)
 
 	// weibo client configured to use test server
-	client = NewClient(nil)
+	client = NewClient("123")
 	url, _ := url.Parse(server.URL)
 	client.BaseURL = url
 }
@@ -63,7 +63,7 @@ func testFormValues(t *testing.T, r *http.Request, values values) {
 }
 
 func TestNewClient(t *testing.T) {
-	c := NewClient(nil)
+	c := NewClient("123")
 
 	if c.BaseURL.String() != defaultBaseURL {
 		t.Errorf("NewClient BaseURL = %v, want %v", c.BaseURL.String(), defaultBaseURL)
@@ -71,7 +71,7 @@ func TestNewClient(t *testing.T) {
 }
 
 func TestNewRequest(t *testing.T) {
-	c := NewClient(nil)
+	c := NewClient("123")
 
 	inURL, outURL := "/foo", defaultBaseURL+"2/foo"
 	req, _ := c.NewRequest("GET", inURL, nil)
@@ -83,7 +83,7 @@ func TestNewRequest(t *testing.T) {
 }
 
 func TestNewRequest_invalidJSON(t *testing.T) {
-	c := NewClient(nil)
+	c := NewClient("123")
 
 	type T struct {
 		A map[int]interface{}
@@ -168,8 +168,9 @@ func TestCheckResponse(t *testing.T) {
 	res := &http.Response{
 		Request:    &http.Request{},
 		StatusCode: http.StatusNotFound,
-		Body: ioutil.NopCloser(strings.NewReader(`{"message":"m",
-            "errors": [{"resource": "r", "field": "f", "code": "c"}]}`)),
+		Body: ioutil.NopCloser(strings.NewReader(
+			`{"request": "r", "error_code": 400, "error": "e"}`,
+		)),
 	}
 	err := CheckResponse(res)
 
@@ -178,9 +179,10 @@ func TestCheckResponse(t *testing.T) {
 	}
 
 	want := &ErrorResponse{
-		Response: res,
-		Message:  "m",
-		Errors:   []Error{{Resource: "r", Field: "f", Code: "c"}},
+		Response:   res,
+		RequestURL: "r",
+		ErrorCode:  400,
+		Message:    "e",
 	}
 
 	if !reflect.DeepEqual(err, want) {
@@ -213,12 +215,5 @@ func TestErrorResponse_Error(t *testing.T) {
 	err := ErrorResponse{Message: "m", Response: res}
 	if err.Error() == "" {
 		t.Error("Expected non-empty ErrorResponse.Error()")
-	}
-}
-
-func TestError_Error(t *testing.T) {
-	err := Error{}
-	if err.Error() == "" {
-		t.Error("Expected non-empty Error.Error()")
 	}
 }
