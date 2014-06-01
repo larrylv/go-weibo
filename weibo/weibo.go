@@ -26,6 +26,9 @@ type Client struct {
 	// HTTP client used to communcate with the API.
 	client *http.Client
 
+	// Access Token
+	accessToken string
+
 	// Base URL for API requests.
 	BaseURL *url.URL
 
@@ -68,17 +71,11 @@ func addOptions(s string, opt interface{}) (string, error) {
 	return u.String(), nil
 }
 
-// NewClient returns a new Weibo API client.  If a nil httpClient is
-// provided, http.DefaultClient will be used. To use API methods which require
-// authentication, provide an http.Client that will perform the authentication
-// for you (such as that provided by goauth2 library).
-func NewClient(httpClient *http.Client) *Client {
-	if httpClient == nil {
-		httpClient = http.DefaultClient
-	}
+// NewClient returns a new Weibo API client.
+func NewClient(accessToken string) *Client {
 	baseURL, _ := url.Parse(defaultBaseURL)
 
-	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
+	c := &Client{client: http.DefaultClient, accessToken: accessToken, BaseURL: baseURL, UserAgent: userAgent}
 	c.Statuses = &StatusesService{client: c}
 
 	return c
