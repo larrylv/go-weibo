@@ -169,29 +169,16 @@ func (c *Client) Do(req *http.Request, v interface{}) (*Response, error) {
 //
 // Weibo API docs: http://open.weibo.com/wiki/Error_code
 type ErrorResponse struct {
-	Response *http.Response // HTTP response that caused this error
-	Message  string         `json:"message"` // error message
-	Errors   []Error        `json:"errors"`  // more detail on individual errors
+	Response   *http.Response // HTTP response that caused this error
+	RequestURL string         `json:"request"`    // request on which the error occured
+	ErrorCode  int            `json:"error_code"` // error_code
+	Message    string         `json:"error"`      // error message
 }
 
 func (r *ErrorResponse) Error() string {
-	return fmt.Sprintf("%v %v: %d %v %+v",
-		r.Response.Request.Method, r.Response.Request.URL,
-		r.Response.StatusCode, r.Message, r.Errors)
-}
-
-// An Error reports more detail on individual error in an ErrorResponse.
-//
-// Weibo API docs: http://open.weibo.com/wiki/Error_code
-type Error struct {
-	Resource string `json:"resource"` // resource on which the error occured
-	Field    string `json:"field"`    // field on which the error occured
-	Code     string `json:"code"`     // validatian error code
-}
-
-func (e *Error) Error() string {
-	return fmt.Sprintf("%v error caused by %v field on %v resource",
-		e.Code, e.Field, e.Resource)
+	return fmt.Sprintf("%v %v: %d %v %v",
+		r.Response.Request.Method, r.RequestURL,
+		r.Response.StatusCode, r.ErrorCode, r.Message)
 }
 
 // CheckResponse checks the API response for errors, and returns them if
