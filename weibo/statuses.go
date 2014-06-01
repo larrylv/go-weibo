@@ -14,15 +14,24 @@ type StatusesService struct {
 
 // Status represents a Weibo's status.
 type Status struct {
-	ID             *int    `json:"id,omitempty"`
-	Text           *string `json:"text,omitempty"`
-	Source         *string `json:"source,omitempty"`
-	Favorited      *bool   `json:"favorited,omitempty"`
-	Truncated      *bool   `json:"truncated,omitempty"`
-	RepostsCount   *int    `json:"reposts_count,omitempty"`
-	CommentsCount  *int    `json:"comments_count,omitempty"`
-	AttitudesCount *int    `json:"attitudes_count,omitemtpy"`
-	Visible        *int    `json:"visible,omitempty"`
+	CreatedAt      *string  `json:"created_at,omitempty"`
+	ID             *int64   `json:"id,omitempty"`
+	MID            *string  `json:"mid,omitempty"`
+	IDStr          *string  `json:"idstr,omitempty"`
+	Text           *string  `json:"text,omitempty"`
+	Source         *string  `json:"source,omitempty"`
+	Favorited      *bool    `json:"favorited,omitempty"`
+	Truncated      *bool    `json:"truncated,omitempty"`
+	RepostsCount   *int     `json:"reposts_count,omitempty"`
+	CommentsCount  *int     `json:"comments_count,omitempty"`
+	AttitudesCount *int     `json:"attitudes_count,omitemtpy"`
+	Visible        *Visible `json:"visible,omitempty"`
+}
+
+// Visible represents visible object of a Weibo status.
+type Visible struct {
+	VType  *int `json:"type,omitempty"`
+	ListID *int `json:"list_id,omitempty"`
 }
 
 // Timeline represents Weibo statuses set.
@@ -47,7 +56,7 @@ type StatusListOptions struct {
 // StatusService.Update method.
 type UpdateOptions struct {
 	Status      *string  `json:status`
-	Visible     *int     `json:visible,omitempty`
+	Visible     *Visible `json:visible,omitempty`
 	ListID      *int     `json:list_id,omitempty`
 	Lat         *float64 `json:lat,omitempty`
 	Long        *float64 `json:long,omitempty`

@@ -28,7 +28,7 @@ func TestUserTimeline(t *testing.T) {
 		t.Errorf("Statuses.UserTimeline returned error: %v", err)
 	}
 
-	want := Timeline{Statuses: []Status{{ID: Int(1), Text: String("hello weibo")}}, TotalNumber: Int(1)}
+	want := Timeline{Statuses: []Status{{ID: Int64(1), Text: String("hello weibo")}}, TotalNumber: Int(1)}
 	if !reflect.DeepEqual(timeline.Statuses, want.Statuses) {
 		t.Errorf("Statuses.UserTimeline returned %+v, want %+v", timeline, want)
 	}
@@ -39,7 +39,7 @@ func TestUpdate(t *testing.T) {
 	defer teardown()
 
 	text := "Hello, weibo!"
-	visible := 2
+	visible := Visible{Int(1), Int(1)}
 
 	mux.HandleFunc("/2/statuses/update.json", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
@@ -49,19 +49,19 @@ func TestUpdate(t *testing.T) {
             {
                 "id" : 1,
                 "text" : "Hello, weibo!",
-                "visible": 1
+                "visible": {"type": 1, "list_id": 1}
             }
             `)
 	})
 
-	opt := &UpdateOptions{Status: String(text), Visible: Int(visible)}
+	opt := &UpdateOptions{Status: String(text), Visible: &visible}
 	status, _, err := client.Statuses.Update(opt)
 
 	if err != nil {
 		t.Errorf("Statuses.Update returned error %v", err)
 	}
 
-	want := &Status{ID: Int(1), Text: String("Hello, weibo!"), Visible: Int(1)}
+	want := &Status{ID: Int64(1), Text: String("Hello, weibo!"), Visible: &visible}
 	if !reflect.DeepEqual(status, want) {
 		t.Errorf("Statuses.Update returned %+v, want %+v", status, want)
 	}
