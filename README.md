@@ -13,9 +13,37 @@ go-weibo is a Go client library for access the [Weibo API][], inspired by [go-gi
 
 This library is __currently under development__, please do not use it in production environment.
 
+## Usage ##
+
+``` go
+import "github.com/larrylv/go-weibo/weibo"
+```
+
+The go-weibo library does not directly handle authentication.  Instead, when
+creating a new client, pass an `AccessToken` that will be added to every request's
+header, and handle authentication for you.  The easiest and recommended way to
+get an `AccessToken` is using the [goauth2][] library.
+
+For example, to update a weibo:
+
+```go
+accessToken = "FsdRIOEe7c7d"
+client := weibo.NewClient(accessToken)
+
+// Update a weibo
+opts = &weibo.UpdateOptions{Status: weibo.String("Hello, Weibo!")}
+status, _, err := client.Statuses.Update(opts)
+```
+
+See the [goauth2 docs][] for complete instructions on using that library.
+
+For complete usage of go-weibo, see the full [package docs][].
+
 [Weibo API]: http://open.weibo.com/wiki/%E5%BE%AE%E5%8D%9AAPI
 [go-github]: https://github.com/google/go-github/
-
+[goauth2]: https://code.google.com/p/goauth2/
+[goauth2 docs]: http://godoc.org/code.google.com/p/goauth2/oauth
+[package docs]: http://godoc.org/github.com/larrylv/go-weibo/weibo
 
 ## License
 
