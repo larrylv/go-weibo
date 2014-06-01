@@ -1,12 +1,15 @@
 go-weibo
 ========
 
+[![Build Status](https://img.shields.io/travis/larrylv/go-weibo.svg?branch=master)][travis]
+[![Coverage Status](http://img.shields.io/coveralls/larrylv/go-weibo.svg)][coveralls]
+
+[travis]: https://travis-ci.org/larrylv/go-weibo
+[coveralls]: https://coveralls.io/r/larrylv/go-weibo
+
 go-weibo is a Go client library for access the [Weibo API][], inspired by [go-github][].
 
-**Documentation:** <http://godoc.org/github.com/larrylv/go-weibo/weibo>  
-**Build Status:** [![Build Status](https://travis-ci.org/larrylv/go-weibo.png?branch=master)](https://travis-ci.org/larrylv/go-weibob)  
-
-go-weibo requires Go version 1.1 or greater.
+**Documentation:** <http://godoc.org/github.com/larrylv/go-weibo/weibo>
 
 This library is __currently under development__, please do not use it in production environment.
 
