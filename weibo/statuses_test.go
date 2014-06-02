@@ -56,7 +56,7 @@ func TestStatusesUpdate(t *testing.T) {
             `)
 	})
 
-	opt := &StatusBody{Status: String(text), Visible: Int(visible)}
+	opt := &StatusRequest{Status: String(text), Visible: Int(visible)}
 	status, _, err := client.Statuses.Update(opt)
 
 	if err != nil {

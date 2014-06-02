@@ -52,9 +52,8 @@ type StatusListOptions struct {
 	ListOptions
 }
 
-// StatusBody specifies the parameters to the
-// StatusService.Update method.
-type StatusBody struct {
+// StatusRequest represetns a request to create a status.
+type StatusRequest struct {
 	Status      *string  `json:"status"`
 	Visible     *int     `json:"visible,omitempty"`
 	ListID      *int     `json:"list_id,omitempty"`
@@ -88,7 +87,7 @@ func (s *StatusesService) UserTimeline(opt *StatusListOptions) (*Timeline, *Resp
 	return timeline, resp, err
 }
 
-func (s *StatusesService) Update(opt *StatusBody) (*Status, *Response, error) {
+func (s *StatusesService) Update(opt *StatusRequest) (*Status, *Response, error) {
 	u := "statuses/update.json"
 
 	req, err := s.client.NewRequest("POST", u, opt)
