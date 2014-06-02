@@ -54,13 +54,13 @@ type StatusListOptions struct {
 
 // StatusRequest represetns a request to create a status.
 type StatusRequest struct {
-	Status      *string  `json:"status"`
-	Visible     *int     `json:"visible,omitempty"`
-	ListID      *int     `json:"list_id,omitempty"`
-	Lat         *float64 `json:"lat,omitempty"`
-	Long        *float64 `json:"long,omitempty"`
-	Annotations *string  `json:"annotations,omitempty"`
-	RealIP      *string  `json:"rip,omitempty"`
+	Status      *string  `url:"status"`
+	Visible     *int     `url:"visible,omitempty"`
+	ListID      *int     `url:"list_id,omitempty"`
+	Lat         *float64 `url:"lat,omitempty"`
+	Long        *float64 `url:"long,omitempty"`
+	Annotations *string  `url:"annotations,omitempty"`
+	RealIP      *string  `url:"rip,omitempty"`
 }
 
 // Timeline for a user. Passing the empty string will return
@@ -87,7 +87,7 @@ func (s *StatusesService) UserTimeline(opt *StatusListOptions) (*Timeline, *Resp
 	return timeline, resp, err
 }
 
-func (s *StatusesService) Update(opt *StatusRequest) (*Status, *Response, error) {
+func (s *StatusesService) Create(opt *StatusRequest) (*Status, *Response, error) {
 	u := "statuses/update.json"
 
 	req, err := s.client.NewRequest("POST", u, opt)
@@ -95,7 +95,7 @@ func (s *StatusesService) Update(opt *StatusRequest) (*Status, *Response, error)
 		return nil, nil, err
 	}
 
-	status := &Status{}
+	status := new(Status)
 	resp, err := s.client.Do(req, status)
 	if err != nil {
 		return nil, resp, err

@@ -39,10 +39,18 @@ func TestStatusesUpdate(t *testing.T) {
 	defer teardown()
 
 	text := "Hello, weibo!"
-	visible := 1
+
+	opt := &StatusRequest{
+		Status:  String(text),
+		Visible: Int(1),
+	}
 
 	mux.HandleFunc("/2/statuses/update.json", func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "POST")
+		testPostFormValues(t, r, values{
+			"status":  text,
+			"visible": "1",
+		})
 
 		fmt.Fprint(w,
 			`
@@ -56,8 +64,7 @@ func TestStatusesUpdate(t *testing.T) {
             `)
 	})
 
-	opt := &StatusRequest{Status: String(text), Visible: Int(visible)}
-	status, _, err := client.Statuses.Update(opt)
+	status, _, err := client.Statuses.Create(opt)
 
 	if err != nil {
 		t.Errorf("Statuses.Update returned error %v", err)

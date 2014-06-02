@@ -1,7 +1,6 @@
 package weibo
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -62,6 +61,14 @@ func testFormValues(t *testing.T, r *http.Request, values values) {
 	}
 }
 
+func testPostFormValues(t *testing.T, r *http.Request, values values) {
+	for k, v := range values {
+		if fv := r.PostFormValue(k); fv != v {
+			t.Errorf("Post parameters %q is %v, want %v", k, fv, v)
+		}
+	}
+}
+
 func TestNewClient(t *testing.T) {
 	c := NewClient("123")
 
@@ -91,22 +98,6 @@ func TestNewRequest_hasSlashPrefix(t *testing.T) {
 	// test that relative URL was expanded
 	if req.URL.String() != outURL {
 		t.Errorf("NewRequest(%v) URL = %v, want %v", inURL, req.URL, outURL)
-	}
-}
-
-func TestNewRequest_invalidJSON(t *testing.T) {
-	c := NewClient("123")
-
-	type T struct {
-		A map[int]interface{}
-	}
-	_, err := c.NewRequest("GET", "/", &T{})
-
-	if err == nil {
-		t.Error("Expected error to be returned.")
-	}
-	if err, ok := err.(*json.UnsupportedTypeError); !ok {
-		t.Errorf("Expected a JSON error; got %#v", err)
 	}
 }
 

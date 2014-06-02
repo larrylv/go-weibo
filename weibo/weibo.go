@@ -1,7 +1,6 @@
 package weibo
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -100,11 +99,13 @@ func (c *Client) NewRequest(method, urlString string, body interface{}) (*http.R
 
 	u := c.BaseURL.ResolveReference(rel)
 
-	buf := new(bytes.Buffer)
+	var buf io.Reader
 	if body != nil {
-		if err := json.NewEncoder(buf).Encode(body); err != nil {
+		qs, err := query.Values(body)
+		if err != nil {
 			return nil, err
 		}
+		buf = strings.NewReader(qs.Encode())
 	}
 
 	req, err := http.NewRequest(method, u.String(), buf)
@@ -112,6 +113,7 @@ func (c *Client) NewRequest(method, urlString string, body interface{}) (*http.R
 		return nil, err
 	}
 
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
 	req.Header.Add("User-Agent", c.UserAgent)
 	req.Header.Add("Authorization", "OAuth2 "+c.accessToken)
 	return req, nil
