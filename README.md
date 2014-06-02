@@ -31,8 +31,8 @@ accessToken = "FsdRIOEe7c7d"
 client := weibo.NewClient(accessToken)
 
 // Update a weibo
-opts = &weibo.StatusBody{Status: weibo.String("Hello, Weibo!")}
-status, _, err := client.Statuses.Update(opts)
+opts = &weibo.StatusRequest{Status: weibo.String("Hello, Weibo!")}
+status, _, err := client.Statuses.Create(opts)
 ```
 
 See the [goauth2 docs][] for complete instructions on using that library.
