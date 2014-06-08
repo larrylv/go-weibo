@@ -27,7 +27,7 @@ get an `AccessToken` is using the [goauth2][] library.
 For example, to update a weibo:
 
 ```go
-accessToken = "FsdRIOEe7c7d"
+accessToken = "access_token"
 client := weibo.NewClient(accessToken)
 
 // Update a weibo
