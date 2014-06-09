@@ -18,7 +18,7 @@ func TestStatusesUserTimeline(t *testing.T) {
 		testFormValues(t, r, values{
 			"uid": uid,
 		})
-		fmt.Fprint(w, `{"statuses": [{"id": 1, "text": "hello weibo"}], "total_number": 1}`)
+		fmt.Fprint(w, `{"statuses": [{"id": 1, "text": "hello weibo", "user": {"id": 42, "name": "larrylv"}}], "total_number": 1}`)
 	})
 
 	opt := &StatusListOptions{UID: uid}
@@ -28,7 +28,7 @@ func TestStatusesUserTimeline(t *testing.T) {
 		t.Errorf("Statuses.UserTimeline returned error: %v", err)
 	}
 
-	want := Timeline{Statuses: []Status{{ID: Int64(1), Text: String("hello weibo")}}, TotalNumber: Int(1)}
+	want := Timeline{Statuses: []Status{{ID: Int64(1), Text: String("hello weibo"), User: &User{ID: Int(42), Name: String("larrylv")}}}, TotalNumber: Int(1)}
 	if !reflect.DeepEqual(timeline.Statuses, want.Statuses) {
 		t.Errorf("Statuses.UserTimeline returned %+v, want %+v", timeline, want)
 	}
