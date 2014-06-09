@@ -34,6 +34,33 @@ func TestStatusesUserTimeline(t *testing.T) {
 	}
 }
 
+func TestStatusesUserTimelineIDs(t *testing.T) {
+	setup()
+	defer teardown()
+
+	uid := "42"
+
+	mux.HandleFunc("/2/statuses/user_timeline/ids.json", func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, "GET")
+		testFormValues(t, r, values{
+			"uid": uid,
+		})
+		fmt.Fprint(w, `{"statuses": ["1234", "5678"], "total_number": 2}`)
+	})
+
+	opt := &StatusListOptions{UID: uid}
+	timelineIDs, _, err := client.Statuses.UserTimelineIDs(opt)
+
+	if err != nil {
+		t.Errorf("Statuses.UserTimeline returned error: %v", err)
+	}
+
+	want := TimelineIDs{StatusesIDs: []string{"1234", "5678"}, TotalNumber: Int(2)}
+	if !reflect.DeepEqual(timelineIDs.StatusesIDs, want.StatusesIDs) {
+		t.Errorf("Statuses.UserTimelineIDs returned %+v, want %+v", timelineIDs, want)
+	}
+}
+
 func TestStatusesUpdate(t *testing.T) {
 	setup()
 	defer teardown()

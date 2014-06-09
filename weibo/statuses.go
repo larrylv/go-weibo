@@ -43,6 +43,14 @@ type Timeline struct {
 	NextCursor     *int     `json:"next_cursor,omitempty"`
 }
 
+// TimelineIDs represents Weibo statuses ids set.
+type TimelineIDs struct {
+	StatusesIDs    []string `json:"statuses,omitempty"`
+	TotalNumber    *int     `json:"total_number,omitempty"`
+	PreviousCursor *int     `json:"previous_cursor,omitempty"`
+	NextCursor     *int     `json:"next_cursor,omitempty"`
+}
+
 // StatusListOptions specifies the optional parameters to the
 // StatusService.UserTimeline method.
 type StatusListOptions struct {
@@ -64,7 +72,7 @@ type StatusRequest struct {
 	RealIP      *string  `url:"rip,omitempty"`
 }
 
-// Timeline for a user. Passing the empty string will return
+// Timeline of a user. Passing the empty string will return
 // timeline for the authenticated user.
 //
 // Weibo API docs: http://open.weibo.com/wiki/2/statuses/user_timeline
@@ -88,6 +96,33 @@ func (s *StatusesService) UserTimeline(opt *StatusListOptions) (*Timeline, *Resp
 	return timeline, resp, err
 }
 
+// Timeline IDs of a user. Passing the empty string will return
+// timeline for the authenticated user.
+//
+// Weibo API docs: http://open.weibo.com/wiki/2/statuses/user_timeline
+func (s *StatusesService) UserTimelineIDs(opt *StatusListOptions) (*TimelineIDs, *Response, error) {
+	u, err := addOptions("statuses/user_timeline/ids.json", opt)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	req, err := s.client.NewRequest("GET", u, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	timelineIDs := &TimelineIDs{}
+	resp, err := s.client.Do(req, timelineIDs)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return timelineIDs, resp, err
+}
+
+// Create a Weibo Status.
+//
+// Weibo API docs: http://open.weibo.com/wiki/2/statuses/update
 func (s *StatusesService) Create(opt *StatusRequest) (*Status, *Response, error) {
 	u := "statuses/update.json"
 
