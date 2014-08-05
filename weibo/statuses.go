@@ -22,7 +22,7 @@ type Status struct {
 	Source         *string  `json:"source,omitempty"`
 	Favorited      *bool    `json:"favorited,omitempty"`
 	Truncated      *bool    `json:"truncated,omitempty"`
-	User           *User    `json:user,omitempty`
+	User           *User    `json:"user,omitempty"`
 	RepostsCount   *int     `json:"reposts_count,omitempty"`
 	CommentsCount  *int     `json:"comments_count,omitempty"`
 	AttitudesCount *int     `json:"attitudes_count,omitemtpy"`
