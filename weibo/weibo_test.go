@@ -209,7 +209,7 @@ func TestCheckResponse_noBody(t *testing.T) {
 		Response: res,
 	}
 	if !reflect.DeepEqual(err, want) {
-		t.Error("Error = %#v, want %#v", err, want)
+		t.Errorf("Error = %#v, want %#v", err, want)
 	}
 }
 
